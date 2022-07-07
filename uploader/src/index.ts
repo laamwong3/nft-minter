@@ -1,6 +1,3 @@
-// const fse = require("fs-extra");
-// const Moralis = require("moralis/node");
-// require("dotenv").config({ path: "../.env" });
 import * as fse from "fs-extra";
 import { Moralis as MoralisRef } from "moralis/types/node";
 import * as MoralisImport from "moralis/node";

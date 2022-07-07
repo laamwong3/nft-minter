@@ -1,9 +1,13 @@
 import { ethers } from "hardhat";
 import fs from "fs";
+import metadataPath from "../constants/metadataPath.json";
 
 async function main() {
   const Minter = await ethers.getContractFactory("Minter");
-  const minter = await Minter.deploy("http://test123/metadata/");
+  const minter = await Minter.deploy(
+    metadataPath.metadataUri,
+    metadataPath.contractUri
+  );
 
   console.log("deploying................");
   console.log(`contract Minter depolyed to ${minter.address}`);

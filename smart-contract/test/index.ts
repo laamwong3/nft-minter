@@ -46,7 +46,7 @@ describe("Unit Testing for all public / external functions", () => {
     it("Should revert if exceed maximum supplies", async () => {
       await expect(minter.mintNfts(31)).to.be.reverted;
     });
-    it("should revert if amount is invalid", async () => {
+    it("Should revert if amount is invalid", async () => {
       await expect(minter.mintNfts(0)).to.be.reverted;
     });
     it("Should revert if not enough fund sent", async () => {

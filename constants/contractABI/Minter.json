@@ -1,5 +1,5 @@
 {
-  "address": "0x30C86c833FfFdE3f6cc54eC7DBaCFF4d10E21E31",
+  "address": "0x98DD7c505D8eb3c187ba5750DB7552ccd373dc73",
   "abi": [
     {
       "type": "constructor",
@@ -8,6 +8,10 @@
         {
           "type": "string",
           "name": "_baseTokenUri"
+        },
+        {
+          "type": "string",
+          "name": "_contractUri"
         }
       ]
     },
@@ -48,7 +52,22 @@
     },
     {
       "type": "error",
+      "name": "Minter__CannotCallByContract",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "Minter__InvalidMintAmount",
+      "inputs": []
+    },
+    {
+      "type": "error",
       "name": "Minter__MaxSupplyReached",
+      "inputs": []
+    },
+    {
+      "type": "error",
+      "name": "Minter__NotEnoughMoney",
       "inputs": []
     },
     {
@@ -203,6 +222,58 @@
     },
     {
       "type": "function",
+      "name": "MAX_SUPPLY",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "MINT_PRICE",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "TOKEN_NAME",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "TOKEN_SYMBOL",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "type": "function",
       "name": "approve",
       "constant": false,
       "payable": false,
@@ -238,6 +309,45 @@
     },
     {
       "type": "function",
+      "name": "baseTokenUri",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "contractURI",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "contractUri",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "type": "function",
       "name": "getApproved",
       "constant": true,
       "stateMutability": "view",
@@ -251,6 +361,19 @@
       "outputs": [
         {
           "type": "address"
+        }
+      ]
+    },
+    {
+      "type": "function",
+      "name": "getContractBalance",
+      "constant": true,
+      "stateMutability": "view",
+      "payable": false,
+      "inputs": [],
+      "outputs": [
+        {
+          "type": "uint256"
         }
       ]
     },
@@ -280,7 +403,8 @@
       "type": "function",
       "name": "mintNfts",
       "constant": false,
-      "payable": false,
+      "stateMutability": "payable",
+      "payable": true,
       "inputs": [
         {
           "type": "uint256",
