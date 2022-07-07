@@ -18,9 +18,13 @@ contract Minter is ERC721A, Ownable, ReentrancyGuard {
     string public constant TOKEN_SYMBOL = "MYN";
 
     string public baseTokenUri;
+    string public contractUri;
 
-    constructor(string memory _baseTokenUri) ERC721A(TOKEN_NAME, TOKEN_SYMBOL) {
+    constructor(string memory _baseTokenUri, string memory _contractUri)
+        ERC721A(TOKEN_NAME, TOKEN_SYMBOL)
+    {
         baseTokenUri = _baseTokenUri;
+        contractUri = _contractUri;
     }
 
     modifier callerIsUser() {
@@ -74,5 +78,9 @@ contract Minter is ERC721A, Ownable, ReentrancyGuard {
 
     function getContractBalance() public view returns (uint256) {
         return address(this).balance;
+    }
+
+    function contractURI() public view returns (string memory) {
+        return contractUri;
     }
 }

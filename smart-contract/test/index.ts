@@ -17,13 +17,14 @@ describe("Unit Testing for all public / external functions", () => {
   let mockContract: MockContract;
   let owner: SignerWithAddress;
   let users: SignerWithAddress[];
-  const tokenUri = "http://test123/metadata/";
+  const tokenUri = "https://test123/metadata/";
+  const contractUri = "https://testContractUri/metadata";
   const valueInEther = 0.001;
 
   beforeEach(async () => {
     [owner, ...users] = await ethers.getSigners();
     Minter = await ethers.getContractFactory("Minter");
-    minter = await Minter.deploy(tokenUri);
+    minter = await Minter.deploy(tokenUri, contractUri);
     await minter.deployed();
     MockContract = await ethers.getContractFactory("MockContract");
     mockContract = await MockContract.deploy(minter.address);
@@ -31,8 +32,9 @@ describe("Unit Testing for all public / external functions", () => {
   });
 
   describe("constructor", () => {
-    it("Should set the token uri", async () => {
+    it("Should set the state variable", async () => {
       expect(await minter.baseTokenUri()).to.be.equal(tokenUri);
+      expect(await minter.contractURI()).to.be.equal(contractUri);
     });
   });
   describe("minNfts", () => {

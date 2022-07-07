@@ -11,5 +11,14 @@ Follow instruction from [Daniel from hashlip](https://github.com/HashLips/hashli
 ## Upload to IPFS
 
 ```bash
-
+cd src
+ts-node index.ts
 ```
+
+The command line will perform the following tasks
+
+- Copy folder from the art engine
+- Upload all images to IPFS
+- Rename the image path in json files
+- Upload metadata to IPFS
+- Save to database (optionally)
