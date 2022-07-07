@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.7;
 
 import "erc721a/contracts/ERC721A.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -8,14 +8,16 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 error Minter__CannotCallByContract();
 error Minter__MaxSupplyReached();
 error Minter__WithdrawFailed();
+error Minter__InvalidMintAmount();
+error Minter__NotEnoughMoney();
 
 contract Minter is ERC721A, Ownable, ReentrancyGuard {
-    uint256 private constant MAX_SUPPLY = 30;
-    uint256 private constant MINT_PRICE = 0.001 ether;
-    string private constant TOKEN_NAME = "MYNFT";
-    string private constant TOKEN_SYMBOL = "MYN";
+    uint256 public constant MAX_SUPPLY = 30;
+    uint256 public constant MINT_PRICE = 0.001 ether;
+    string public constant TOKEN_NAME = "MYNFT";
+    string public constant TOKEN_SYMBOL = "MYN";
 
-    string private baseTokenUri;
+    string public baseTokenUri;
 
     constructor(string memory _baseTokenUri) ERC721A(TOKEN_NAME, TOKEN_SYMBOL) {
         baseTokenUri = _baseTokenUri;
@@ -26,9 +28,14 @@ contract Minter is ERC721A, Ownable, ReentrancyGuard {
         _;
     }
 
-    function mintNfts(uint256 _amount) external onlyOwner {
+    function mintNfts(uint256 _amount) external payable callerIsUser {
+        if (_amount <= 0) revert Minter__InvalidMintAmount();
         if ((totalSupply() + _amount) > MAX_SUPPLY)
             revert Minter__MaxSupplyReached();
+        if (_msgSender() != owner()) {
+            if (msg.value < (_amount * MINT_PRICE))
+                revert Minter__NotEnoughMoney();
+        }
         _safeMint(_msgSender(), _amount);
     }
 
@@ -63,5 +70,9 @@ contract Minter is ERC721A, Ownable, ReentrancyGuard {
             ""
         );
         if (!success) revert Minter__WithdrawFailed();
+    }
+
+    function getContractBalance() public view returns (uint256) {
+        return address(this).balance;
     }
 }
