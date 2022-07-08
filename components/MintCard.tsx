@@ -27,7 +27,7 @@ export default function MintCard() {
   // }, []);
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 400 }}>
       <Image src={minterLogo} objectFit="cover" />
       <CardContent>
         <Typography
@@ -38,12 +38,20 @@ export default function MintCard() {
         >
           Public Mint
         </Typography>
-        <Typography textAlign="center" variant="h4" color="text.secondary">
+        <Typography
+          gutterBottom
+          textAlign="center"
+          variant="h4"
+          color="text.secondary"
+        >
           1 out of 30 Minted
+        </Typography>
+        <Typography textAlign="center" variant="body2">
+          {account}
         </Typography>
       </CardContent>
       <CardActions sx={{ paddingBottom: 5 }}>
-        <Stack direction="row" justifyContent="center" width="100%">
+        <Stack gap={2} direction="row" justifyContent="center" width="100%">
           {account ? (
             <Button
               size="large"
@@ -63,6 +71,13 @@ export default function MintCard() {
               Connect Wallet
             </Button>
           )}
+          <Button
+            onClick={async () => {
+              await deactivateWeb3();
+            }}
+          >
+            Disconnect
+          </Button>
         </Stack>
       </CardActions>
     </Card>
