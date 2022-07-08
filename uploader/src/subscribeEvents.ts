@@ -2,6 +2,7 @@
 // import * as MoralisImport from "moralis/node";
 import { config } from "dotenv";
 import minterContract from "../constants/contractAbi/Minter.json";
+// import Moralis from "moralis/node";
 import Moralis from "moralis/node";
 
 config({ path: "../.env" });
