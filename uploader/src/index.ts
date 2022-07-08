@@ -1,6 +1,7 @@
 import * as fse from "fs-extra";
-import { Moralis as MoralisRef } from "moralis/types/node";
-import * as MoralisImport from "moralis/node";
+import Moralis from "moralis/node";
+// import { Moralis as MoralisRef } from "moralis/types/node";
+// import * as MoralisImport from "moralis/node";
 import { config } from "dotenv";
 
 interface OpenseaMetadata {
@@ -27,7 +28,7 @@ interface Attribute {
 }
 
 config({ path: "../.env" });
-const Moralis = MoralisImport as unknown as MoralisRef;
+// const Moralis = MoralisImport as unknown as MoralisRef;
 
 const collectionName = "Your Collection Name";
 const collectionDescription = "Your Collection Description";

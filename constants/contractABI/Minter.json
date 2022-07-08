@@ -1,5 +1,5 @@
 {
-  "address": "0xFdB4fC2969BcA26AF47F14ff8dA140bDB9079216",
+  "address": "0x2fef795fe6aff21eBfE7637447B8a913C57fD207",
   "abi": [
     {
       "type": "constructor",
@@ -188,12 +188,12 @@
       "inputs": [
         {
           "type": "address",
-          "name": "_to",
+          "name": "to",
           "indexed": false
         },
         {
           "type": "uint256",
-          "name": "_amount",
+          "name": "amount",
           "indexed": false
         }
       ]

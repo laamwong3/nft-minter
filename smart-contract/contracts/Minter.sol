@@ -12,7 +12,7 @@ error Minter__InvalidMintAmount();
 error Minter__NotEnoughMoney();
 
 contract Minter is ERC721A, Ownable, ReentrancyGuard {
-    event NftMinted(address _to, uint256 _amount);
+    event NftMinted(address to, uint256 amount);
 
     uint256 private constant MAX_SUPPLY = 30;
     uint256 private constant MINT_PRICE = 0.001 ether;
