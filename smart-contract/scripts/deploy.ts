@@ -25,6 +25,10 @@ async function main() {
     "../constants/contractABI/Minter.json",
     JSON.stringify(data, null, 2)
   );
+  fs.writeFileSync(
+    "../uploader/constants/contractAbi/Minter.json",
+    JSON.stringify(data, null, 2)
+  );
 }
 
 main().catch((error) => {

@@ -12,13 +12,15 @@ error Minter__InvalidMintAmount();
 error Minter__NotEnoughMoney();
 
 contract Minter is ERC721A, Ownable, ReentrancyGuard {
-    uint256 public constant MAX_SUPPLY = 30;
-    uint256 public constant MINT_PRICE = 0.001 ether;
-    string public constant TOKEN_NAME = "MYNFT";
-    string public constant TOKEN_SYMBOL = "MYN";
+    event NftMinted(address _to, uint256 _amount);
 
-    string public baseTokenUri;
-    string public contractUri;
+    uint256 private constant MAX_SUPPLY = 30;
+    uint256 private constant MINT_PRICE = 0.001 ether;
+    string private constant TOKEN_NAME = "MYNFT";
+    string private constant TOKEN_SYMBOL = "MYN";
+
+    string private baseTokenUri;
+    string private contractUri;
 
     constructor(string memory _baseTokenUri, string memory _contractUri)
         ERC721A(TOKEN_NAME, TOKEN_SYMBOL)
@@ -41,6 +43,7 @@ contract Minter is ERC721A, Ownable, ReentrancyGuard {
                 revert Minter__NotEnoughMoney();
         }
         _safeMint(_msgSender(), _amount);
+        emit NftMinted(_msgSender(), _amount);
     }
 
     function _startTokenId() internal view virtual override returns (uint256) {

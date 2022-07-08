@@ -38,7 +38,6 @@ const contractUriMetadataFile = "contractUriMetadata.json";
 
 const serverUrl = process.env.SERVER_URL;
 const appId = process.env.APP_ID;
-Moralis.start({ serverUrl: serverUrl, appId: appId });
 
 const copyCollection = async () => {
   const destFolder = "../build";
@@ -162,6 +161,7 @@ const saveToDb = async (imageCid: string, metadataCid: string) => {
 };
 
 (async () => {
+  await Moralis.start({ serverUrl: serverUrl, appId: appId });
   await copyCollection();
   const imageCid = await uploadImageToIPFS();
   await updateMetadata(imageCid);
