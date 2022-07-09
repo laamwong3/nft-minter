@@ -10,6 +10,7 @@ import { Stack } from "@mui/material";
 import minterLogo from "../public/minterImage.jpeg";
 import Moralis from "moralis";
 import {
+  useApiContract,
   useMoralis,
   useMoralisQuery,
   useMoralisSubscription,
@@ -70,12 +71,26 @@ export default function MintCard() {
     })();
   }, [newEvent]);
   // console.log(totalSupplyData);
+  const { runContractFunction } = useApiContract({
+    address: MinterContract.address,
+    functionName: "mintNfts",
+    abi: MinterContract.abi,
+    chain: "0x13881",
+  });
+
   const { fetch: mintNfts, isLoading: isMinting } = useWeb3ExecuteFunction({
     abi: MinterContract.abi,
     contractAddress: MinterContract.address,
     functionName: "mintNfts",
     params: { _amount: 1 },
     msgValue: Moralis.Units.ETH("0.001"),
+  });
+
+  const { fetch: getTotalSupply } = useWeb3ExecuteFunction({
+    abi: MinterContract.abi,
+    contractAddress: MinterContract.address,
+    functionName: "totalSupply",
+    params: {},
   });
   const dispatch = useNotification();
 
@@ -150,15 +165,27 @@ export default function MintCard() {
               >
                 Disconnect
               </Button>
+              {/* <Button
+                onClick={async () => {
+                  await runContractFunction({
+                    onSuccess: (res) => console.log(res),
+                    onError: (err) => console.log(err),
+                  });
+                }}
+              >
+                TESTING
+              </Button> */}
             </>
           ) : (
-            <Button
-              disabled={isWeb3EnableLoading || isMinting || isFinishMinting}
-              size="large"
-              onClick={async () => await enableWeb3()}
-            >
-              Connect Wallet
-            </Button>
+            <>
+              <Button
+                disabled={isWeb3EnableLoading || isMinting || isFinishMinting}
+                size="large"
+                onClick={async () => await enableWeb3()}
+              >
+                Connect Wallet
+              </Button>
+            </>
           )}
         </Stack>
       </CardActions>
