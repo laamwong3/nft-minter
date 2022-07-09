@@ -2,7 +2,6 @@ import * as React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
@@ -10,7 +9,6 @@ import { Stack } from "@mui/material";
 import minterLogo from "../public/minterImage.jpeg";
 import Moralis from "moralis";
 import {
-  useApiContract,
   useMoralis,
   useMoralisQuery,
   useMoralisSubscription,
@@ -37,6 +35,7 @@ export default function MintCard() {
     isWeb3Enabled,
     isWeb3EnableLoading,
     deactivateWeb3,
+    Moralis,
   } = useMoralis();
 
   useMoralisSubscription("MintedNFTs", (q) => q, [], {
@@ -70,13 +69,6 @@ export default function MintCard() {
       });
     })();
   }, [newEvent]);
-  // console.log(totalSupplyData);
-  const { runContractFunction } = useApiContract({
-    address: MinterContract.address,
-    functionName: "mintNfts",
-    abi: MinterContract.abi,
-    chain: "0x13881",
-  });
 
   const { fetch: mintNfts, isLoading: isMinting } = useWeb3ExecuteFunction({
     abi: MinterContract.abi,
@@ -86,12 +78,6 @@ export default function MintCard() {
     msgValue: Moralis.Units.ETH("0.001"),
   });
 
-  const { fetch: getTotalSupply } = useWeb3ExecuteFunction({
-    abi: MinterContract.abi,
-    contractAddress: MinterContract.address,
-    functionName: "totalSupply",
-    params: {},
-  });
   const dispatch = useNotification();
 
   const handleMint = async () => {
@@ -165,16 +151,6 @@ export default function MintCard() {
               >
                 Disconnect
               </Button>
-              {/* <Button
-                onClick={async () => {
-                  await runContractFunction({
-                    onSuccess: (res) => console.log(res),
-                    onError: (err) => console.log(err),
-                  });
-                }}
-              >
-                TESTING
-              </Button> */}
             </>
           ) : (
             <>
