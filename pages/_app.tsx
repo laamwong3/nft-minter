@@ -6,7 +6,10 @@ import { NotificationProvider } from "web3uikit";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <MoralisProvider initializeOnMount={false}>
+    <MoralisProvider
+      serverUrl={process.env.NEXT_PUBLIC_SERVER_URL!}
+      appId={process.env.NEXT_PUBLIC_APP_ID!}
+    >
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <NotificationProvider>

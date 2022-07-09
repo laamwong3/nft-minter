@@ -10,7 +10,6 @@ import { Stack } from "@mui/material";
 import minterLogo from "../public/minterImage.jpeg";
 import Moralis from "moralis";
 import {
-  useApiContract,
   useMoralis,
   useMoralisQuery,
   useMoralisSubscription,
@@ -27,6 +26,7 @@ const MAX_SUPPLY: number = 30;
 
 export default function MintCard() {
   const [totalSupply, setTotalSupply] = React.useState(0);
+  const [isFinishMinting, setIsFinishMinting] = React.useState(false);
   const [newEvent, setNewEvent] =
     React.useState<Moralis.Object<Moralis.Attributes>>();
 
@@ -38,31 +38,38 @@ export default function MintCard() {
     deactivateWeb3,
   } = useMoralis();
 
-  //contract interaction
-  // const { fetch: getTotalSupply, isLoading: isGettingTotalSupply } =
-  //   useWeb3ExecuteFunction({
-  //     abi: MinterContract.abi,
-  //     contractAddress: MinterContract.address,
-  //     functionName: "totalSupply",
-  //   });
-
-  const { runContractFunction: getTotalSupply, data } = useApiContract({
-    abi: MinterContract.abi,
-    address: MinterContract.address,
-    functionName: "totalSupply",
-    chain: "mumbai",
+  useMoralisSubscription("MintedNFTs", (q) => q, [], {
+    onUpdate: (newData) => setNewEvent(newData),
   });
+
+  const { fetch: getNewTotalSupply } = useMoralisQuery(
+    "MintedNFTs",
+    (q) => q.select("amount_decimal"),
+    [],
+    {
+      autoFetch: false,
+    }
+  );
+
   React.useEffect(() => {
     (async () => {
-      await getTotalSupply({
-        onSuccess: (results) => {
-          //@ts-ignore
-          console.log(results);
+      await getNewTotalSupply({
+        onSuccess: (newData) => {
+          let currentMintedTotal: number = 0;
+          for (const each of newData) {
+            currentMintedTotal += Number(
+              each.attributes.amount_decimal.value.$numberDecimal
+            );
+          }
+          setTotalSupply(currentMintedTotal);
+          if (currentMintedTotal >= MAX_SUPPLY) {
+            setIsFinishMinting(true);
+          }
         },
       });
     })();
-  }, []);
-  if (data) console.log(data);
+  }, [newEvent]);
+  // console.log(totalSupplyData);
   const { fetch: mintNfts, isLoading: isMinting } = useWeb3ExecuteFunction({
     abi: MinterContract.abi,
     contractAddress: MinterContract.address,
@@ -71,23 +78,6 @@ export default function MintCard() {
     msgValue: Moralis.Units.ETH("0.001"),
   });
   const dispatch = useNotification();
-
-  //event listener
-  // useMoralisSubscription("MintedNFTs", (q) => q, [], {
-  //   onUpdate: (data) => {
-  //     console.log(data);
-  //   },
-  // });
-
-  // const { fetch: getTotalSupply } = useMoralisQuery("MintedNFTs", (q) => q, []);
-
-  React.useEffect(() => {
-    (async () => {
-      await getTotalSupply({
-        onSuccess: (results) => console.log(results),
-      });
-    })();
-  }, []);
 
   const handleMint = async () => {
     if (isWeb3Enabled && account) {
@@ -145,7 +135,11 @@ export default function MintCard() {
         <Stack gap={2} direction="row" justifyContent="center" width="100%">
           {isWeb3Enabled && account ? (
             <>
-              <Button disabled={isMinting} size="large" onClick={handleMint}>
+              <Button
+                disabled={isMinting || isFinishMinting}
+                size="large"
+                onClick={handleMint}
+              >
                 Mint
               </Button>
               <Button
@@ -159,7 +153,7 @@ export default function MintCard() {
             </>
           ) : (
             <Button
-              disabled={isWeb3EnableLoading || isMinting}
+              disabled={isWeb3EnableLoading || isMinting || isFinishMinting}
               size="large"
               onClick={async () => await enableWeb3()}
             >
