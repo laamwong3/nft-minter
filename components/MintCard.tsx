@@ -36,6 +36,7 @@ export default function MintCard() {
     isWeb3EnableLoading,
     deactivateWeb3,
     Moralis,
+    isInitialized,
   } = useMoralis();
 
   useMoralisSubscription("MintedNFTs", (q) => q, [], {
